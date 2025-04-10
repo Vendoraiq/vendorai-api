@@ -1,17 +1,17 @@
 const express = require('express');
-const cors = require('cors'); // <- import cors
-const app = express();
+const cors = require('cors'); // <== Add this line
 
-app.use(cors()); // <- enable cors
+const app = express();
+app.use(cors()); // <== Add this line
 app.use(express.json());
 
-// Your route
+const PORT = process.env.PORT || 3000;
+
 app.post('/api', (req, res) => {
-  console.log('✅ VendorAI: Product received:', req.body);
-  res.json({ message: 'Data received' });
+  console.log("Data received:", req.body);
+  res.status(200).json({ message: "Data received" });
 });
 
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`✅ VendorAI API running on port ${PORT}`);
+  console.log(`Server listening on port ${PORT}`);
 });
