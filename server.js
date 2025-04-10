@@ -1,30 +1,32 @@
 // server.js
-
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
-// ✅ Add this route to receive data from the Chrome extension
+// ✅ Endpoint for saving product info
 app.post('/api/save', (req, res) => {
-  const { title, price } = req.body;
+    const { title, price } = req.body;
 
-  console.log('Received product:', { title, price });
+    if (!title || !price) {
+        return res.status(400).json({ message: 'Missing title or price' });
+    }
 
-  // Send success response back to the extension
-  res.json({ message: 'Data received successfully!', data: { title, price } });
+    console.log('✅ Product received:', { title, price });
+
+    // You can add logic here to store in DB, spreadsheet, etc.
+    res.status(200).json({ message: 'Data received successfully', received: { title, price } });
 });
 
-// Optional: for testing Render is working
+// Root route (optional for testing)
 app.get('/', (req, res) => {
-  res.send('VendoraIQ backend is running ✅');
+    res.send('VendoraIQ API is live 🚀');
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+    console.log(`🟢 Server running on port ${PORT}`);
 });
