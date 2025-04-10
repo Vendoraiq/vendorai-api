@@ -1,32 +1,22 @@
-// server.js
 const express = require('express');
-const cors = require('cors');
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+// Middleware to parse JSON from requests
 app.use(express.json());
 
-// ✅ Endpoint for saving product info
-app.post('/api/save', (req, res) => {
-    const { title, price } = req.body;
-
-    if (!title || !price) {
-        return res.status(400).json({ message: 'Missing title or price' });
-    }
-
-    console.log('✅ Product received:', { title, price });
-
-    // You can add logic here to store in DB, spreadsheet, etc.
-    res.status(200).json({ message: 'Data received successfully', received: { title, price } });
+// ✅ Route to receive product data
+app.post('/api', (req, res) => {
+  console.log('✅ Product data received:', req.body);
+  res.status(200).send('✅ Data received successfully');
 });
 
-// Root route (optional for testing)
+// Basic homepage for testing
 app.get('/', (req, res) => {
-    res.send('VendoraIQ API is live 🚀');
+  res.send('VendorAI API is running');
 });
 
+// Start server
 app.listen(PORT, () => {
-    console.log(`🟢 Server running on port ${PORT}`);
+  console.log(`🚀 Server listening on port ${PORT}`);
 });
