@@ -5,24 +5,35 @@ const bodyParser = require("body-parser");
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// 🔐 Allow requests from your Chrome extension
+// ✅ Define the exact origin of your Chrome Extension
+const allowedOrigin = "chrome-extension://blnooiddaimkadcpigegoadmpfkajknm";
+
+// ✅ Set strict CORS options
 const corsOptions = {
-  origin: "chrome-extension://blnooiddaimkadcpigegoadmpfkajknm",
-  methods: "GET,POST,PUT,DELETE",
-  allowedHeaders: "Content-Type",
+  origin: function (origin, callback) {
+    if (origin === allowedOrigin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["POST"],
+  allowedHeaders: ["Content-Type"],
+  credentials: false,
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
-// 🚀 Your test endpoint
+// ✅ API endpoint
 app.post("/api", (req, res) => {
   console.log("✅ VendorAI: Sent to backend");
   console.log("📦 Product received:", req.body);
-
-  res.json({ success: true, received: req.body });
+  res.json({ status: "success", received: req.body });
 });
 
+// ✅ Start server
 app.listen(PORT, () => {
-  console.log(`✅ Server listening on port ${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
