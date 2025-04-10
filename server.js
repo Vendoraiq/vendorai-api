@@ -1,20 +1,30 @@
+// server.js
+
 const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json());
 
-// 👇 new route for your extension
+// ✅ Add this route to receive data from the Chrome extension
 app.post('/api/save', (req, res) => {
-  console.log('Received data from extension:', req.body);
-  res.status(200).json({ message: 'Data received successfully!' });
+  const { title, price } = req.body;
+
+  console.log('Received product:', { title, price });
+
+  // Send success response back to the extension
+  res.json({ message: 'Data received successfully!', data: { title, price } });
 });
 
-// Optional: root route for basic test
+// Optional: for testing Render is working
 app.get('/', (req, res) => {
-  res.send('Hello from the Vendorai API!');
+  res.send('VendoraIQ backend is running ✅');
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
