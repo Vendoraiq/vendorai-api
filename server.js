@@ -3,16 +3,18 @@ const cors = require("cors");
 
 const app = express();
 
-app.use(
-  cors({
-    origin: [
-      "chrome-extension://blnooiddaimkadcpigegoadmpfkajknm"
-    ],
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type"],
-  })
-);
+const allowedOrigins = [
+  "chrome-extension://blnooiddaimkadcpigegoadmpfkajknm"
+];
 
-app.use(express.json());
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  }
+}));
 
-// Your existing routes below here...
+app.use(express.json()); // keep this if it's already in your file
