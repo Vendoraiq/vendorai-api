@@ -1,21 +1,17 @@
 const express = require('express');
-const cors = require('cors'); // ✅ Import CORS
-
+const cors = require('cors'); // ✅ add this
 const app = express();
+
+app.use(cors()); // ✅ allow all origins by default (can restrict later)
+app.use(express.json());
+
 const PORT = process.env.PORT || 3000;
 
-app.use(cors()); // ✅ Enable CORS for all routes
-app.use(express.json()); // ✅ Parse incoming JSON
-
-app.get('/', (req, res) => {
-  res.send('VendorAI API is running');
-});
-
 app.post('/api', (req, res) => {
-  console.log("✅ Product received:", req.body);
-  res.status(200).send('Product received!');
+  console.log('✅ Data received:', req.body);
+  res.json({ message: 'Data received successfully!' });
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
