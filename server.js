@@ -2,36 +2,40 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
+const PORT = process.env.PORT || 10000;
 
+// ✅ Allowed origin (your extension)
 const allowedOrigins = [
   "chrome-extension://blnooiddaimkadcpigegoadmpfkajknm"
 ];
 
+// ✅ Configure CORS middleware
 const corsOptions = {
   origin: function (origin, callback) {
+    // Allow requests from your extension and allow local testing (no origin)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type"],
   credentials: true
 };
 
+// ✅ Middleware setup
 app.use(cors(corsOptions));
-app.use(express.json());
+app.use(express.json()); // To parse JSON in requests
 
-app.options("*", cors(corsOptions)); // Handle preflight for all routes
-
-// Add your routes here
+// ✅ Your main API route for Chrome extension
 app.post("/api", (req, res) => {
-  console.log("✅ API hit with:", req.body);
-  res.json({ message: "Received", data: req.body });
+  console.log("VendorAI: Sent to backend");
+  console.log("Product received:", req.body);
+
+  // Send dummy response back to extension
+  res.json({ message: "Received product successfully!", data: req.body });
 });
 
-const PORT = process.env.PORT || 3000;
+// ✅ Start the server
 app.listen(PORT, () => {
-  console.log(`🚀 Server listening on port ${PORT}`);
+  console.log(`✅ Server is listening on port ${PORT}`);
 });
