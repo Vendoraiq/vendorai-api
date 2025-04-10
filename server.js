@@ -1,8 +1,8 @@
-const express = require("express");
 const cors = require("cors");
-
+const express = require("express");
 const app = express();
 
+// Allow requests only from your Chrome Extension
 const allowedOrigins = [
   "chrome-extension://blnooiddaimkadcpigegoadmpfkajknm"
 ];
@@ -14,7 +14,7 @@ app.use(cors({
     } else {
       callback(new Error("Not allowed by CORS"));
     }
-  }
+  },
+  methods: ["GET", "POST", "OPTIONS"],
+  credentials: true
 }));
-
-app.use(express.json()); // keep this if it's already in your file
