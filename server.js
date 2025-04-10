@@ -1,10 +1,18 @@
-const cors = require('cors');
+const express = require("express");
+const cors = require("cors");
 
-// Allow extension explicitly
-const corsOptions = {
-  origin: ['chrome-extension://<your-extension-id>'], // Replace with your real extension ID
-  methods: ['GET', 'POST'],
-  credentials: true,
-};
+const app = express();
 
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: [
+      "chrome-extension://blnooiddaimkadcpigegoadmpfkajknm"
+    ],
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
+
+app.use(express.json());
+
+// Your existing routes below here...
