@@ -1,23 +1,21 @@
 const express = require('express');
+const cors = require('cors'); // ✅ Import CORS
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware to parse JSON request bodies
-app.use(express.json());
+app.use(cors()); // ✅ Enable CORS for all routes
+app.use(express.json()); // ✅ Parse incoming JSON
 
-// Handle POST requests from the Chrome Extension
-app.post('/api', (req, res) => {
-  const data = req.body;
-  console.log('✅ Product data received:', data);
-  res.status(200).json({ message: '✅ Data received' });
-});
-
-// Optional: health check route
 app.get('/', (req, res) => {
   res.send('VendorAI API is running');
 });
 
-// Start the server
+app.post('/api', (req, res) => {
+  console.log("✅ Product received:", req.body);
+  res.status(200).send('Product received!');
+});
+
 app.listen(PORT, () => {
-  console.log(`🚀 VendorAI API is listening on port ${PORT}`);
+  console.log(`🚀 Server is running on port ${PORT}`);
 });
